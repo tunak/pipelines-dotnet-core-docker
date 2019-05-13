@@ -10,8 +10,11 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  buildConfiguration: 'Release'
+  dockerId: leadforensics
+  imageName: devops:v1
 
 steps:
-- script: docker build -t $(dockerId)/$(imageName) .
-
+- script: |
+    docker build -t $(dockerId)/$(imageName) .
+    docker login -u $(dockerUser) -p $(dockerPass)
+    docker push $(dockerId)/$(imageName)
