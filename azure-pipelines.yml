@@ -5,19 +5,31 @@
 
 trigger:
 - master
-
-pool:
-  vmImage: 'ubuntu-latest'
-
-variables:
-  dockerId: leadforensics
-  imageName: devops:v1
-
 steps:
-- script: |
-    docker build -t $(dockerId)/$(imageName) .
-    docker login -u $env:duser -p $env:dpswd
-    docker push $(dockerId)/$(imageName)
+- powershell: |
+    # Using an input-macro:
+    Write-Host "This works: $(mySecret)"
+
+    # Using the env var directly:
+    Write-Host "This does not work: $env:MYSECRET"
+
+    # Using the mapped env var:
+    Write-Host "This works: $env:MY_MAPPED_ENV_VAR"    # Recommended
   env:
-    dpswd: $(dockerPass)
-    duser: $(dockerUser)
+    MY_MAPPED_ENV_VAR: $(dockerUser)
+
+# pool:
+#   vmImage: 'ubuntu-latest'
+
+# variables:
+#   dockerId: leadforensics
+#   imageName: devops:v1
+
+# steps:
+# - script: |
+#     docker build -t $(dockerId)/$(imageName) .
+#     docker login -u $env:duser -p $env:dpswd
+#     docker push $(dockerId)/$(imageName)
+#   env:
+#     dpswd: $(dockerPass)
+#     duser: $(dockerUser)
